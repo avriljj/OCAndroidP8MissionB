@@ -1,6 +1,7 @@
 package com.example.vitesse.domain.model
 
 import com.example.vitesse.data.entity.CandidatDto
+import java.time.LocalDateTime
 import java.util.Date
 
 class Candidat (
@@ -26,18 +27,21 @@ class Candidat (
             note = this.note
         )
     }
-        // Method to convert an ExerciseDto to an Exercise
+
+
+    companion object {
         fun fromDto(dto: CandidatDto): Candidat {
             return Candidat(
-                id = this.id,
-                name = this.name,
-                surname = this.surname,
-                phone = this.phone,
-                email = this.email,
-                birthDate = this.birthDate,
-                salary = this.salary,
-                note = this.note
+                id = dto.id,
+                name = dto.name,
+                surname = dto.surname,
+                phone = dto.phone,
+                email = dto.email,
+                birthDate = dto.birthDate,
+                salary = dto.salary,
+                note = dto.note
             )
         }
-
     }
+
+}

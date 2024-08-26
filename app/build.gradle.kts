@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt.android) // Add Hilt plugin
+    kotlin("kapt") // Add Kotlin KAPT for annotation processing
 }
 
 android {
@@ -38,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -59,6 +62,36 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0") // Version needs to be added to versions.toml if you want to use a reference
+    kapt(libs.hilt.compiler)
+
+    // Core and AppCompat
+    implementation(libs.androidx.core.ktx)
+    implementation("androidx.appcompat:appcompat:1.6.1") // Add version reference in versions.toml if needed
+    implementation("com.google.android.material:material:1.10.0") // Add version reference in versions.toml if needed
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // Add version reference in versions.toml if needed
+    implementation(libs.androidx.activity.compose)
+    implementation("androidx.fragment:fragment-ktx:1.8.2") // Add version reference in versions.toml if needed
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4") // Add version reference in versions.toml if needed
+
+    // Tests
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Hilt dependencies
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Room dependencies
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

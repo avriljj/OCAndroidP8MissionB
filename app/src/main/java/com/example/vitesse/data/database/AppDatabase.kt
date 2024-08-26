@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.example.vitesse.converter.Converters
 import com.example.vitesse.data.dao.CandidatDtoDao
 import com.example.vitesse.data.entity.CandidatDto
+import kotlinx.coroutines.CoroutineScope
 
 @Database(entities = [CandidatDto::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
@@ -19,7 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getDatabase(context: Context, coroutineScope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

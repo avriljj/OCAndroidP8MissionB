@@ -8,8 +8,7 @@ class CandidatRepository(private val candidatDao: CandidatDtoDao) {
 
     suspend fun getAllCandidats(): List<Candidat> {
         return candidatDao.getAllCandidats()
-            .first() // Collect the first emission of the Flow
-            .map { Candidat.fromDto(it) } // Convert every DTO in Exercise
+            .map { Candidat.fromDto(it) } // Convert every DTO to Candidat
     }
 
 
@@ -23,5 +22,10 @@ class CandidatRepository(private val candidatDao: CandidatDtoDao) {
                 id = candidat.id,
             )
         }
+    }
+
+    suspend fun getFavoriteCandidats(): List<Candidat> {
+        return candidatDao.getFavoriteCandidats()
+            .map { Candidat.fromDto(it) }
     }
 }

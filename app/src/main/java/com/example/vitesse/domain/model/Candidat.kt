@@ -1,18 +1,18 @@
 package com.example.vitesse.domain.model
 
 import com.example.vitesse.data.entity.CandidatDto
-import java.time.LocalDateTime
 import java.util.Date
 
-class Candidat (
-    val id : Long?= null,
-    var name : String,
-    var surname : String,
-    var phone : String,
-    var email : String,
-    var birthDate : Date,
-    var salary : Int,
-    var note : String
+class Candidat(
+    val id: Long?= null,
+    var name: String,
+    var surname: String,
+    var phone: String,
+    var email: String,
+    var birthDate: Date?,
+    var salary: Int,
+    var note: String,
+    var isFav: Boolean
 ){
 
     fun toDto(): CandidatDto {
@@ -24,7 +24,8 @@ class Candidat (
             email = this.email,
             birthDate = this.birthDate,
             salary = this.salary,
-            note = this.note
+            note = this.note,
+            isFav = this.isFav
         )
     }
 
@@ -39,9 +40,11 @@ class Candidat (
                 email = dto.email,
                 birthDate = dto.birthDate,
                 salary = dto.salary,
-                note = dto.note
+                note = dto.note,
+                isFav = dto.isFav
             )
         }
     }
+
 
 }

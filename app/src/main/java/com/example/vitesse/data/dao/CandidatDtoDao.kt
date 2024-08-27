@@ -13,11 +13,14 @@ interface CandidatDtoDao {
 
 
     @Query("SELECT * FROM candidat")
-    fun getAllCandidats(): Flow<List<CandidatDto>>
+    suspend fun getAllCandidats(): List<CandidatDto>
 
 
     @Query("DELETE FROM candidat WHERE id = :id")
     suspend fun deleteCandidatById(id: Long)
+
+    @Query("SELECT * FROM candidat WHERE isFav = 1")
+    suspend fun getFavoriteCandidats(): List<CandidatDto>
 
 
 }

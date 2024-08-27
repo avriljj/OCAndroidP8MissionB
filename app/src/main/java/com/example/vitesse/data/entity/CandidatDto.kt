@@ -3,7 +3,6 @@ package com.example.vitesse.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 import java.util.Date
 
 @Entity(tableName = "candidat")
@@ -29,12 +28,16 @@ data class CandidatDto(
     var email: String,
 
     @ColumnInfo(name = "birthDate")
-    var birthDate: Date,
+    var birthDate: Date?,
 
     @ColumnInfo(name = "salary")
     var salary: Int,
 
     @ColumnInfo(name = "note")
-    var note: String
+    var note: String,
+
+    @ColumnInfo(name = "isFav")
+    var isFav: Boolean
+
 
 )

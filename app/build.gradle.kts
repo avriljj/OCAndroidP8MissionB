@@ -71,12 +71,17 @@ dependencies {
     // Core and AppCompat
     implementation(libs.androidx.core.ktx)
     implementation("androidx.appcompat:appcompat:1.6.1") // Add version reference in versions.toml if needed
-    implementation("com.google.android.material:material:1.10.0") // Add version reference in versions.toml if needed
+    implementation("com.google.android.material:material:1.12.0") // Add version reference in versions.toml if needed
     implementation("androidx.constraintlayout:constraintlayout:2.1.4") // Add version reference in versions.toml if needed
     implementation(libs.androidx.activity.compose)
     implementation("androidx.fragment:fragment-ktx:1.8.2") // Add version reference in versions.toml if needed
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4") // Add version reference in versions.toml if needed
+    
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.viewpager2:viewpager2:1.1.0")
+
+    implementation ("androidx.appcompat:appcompat:1.7.0")
 
     // Tests
     testImplementation(libs.junit)

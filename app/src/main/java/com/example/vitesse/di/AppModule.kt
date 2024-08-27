@@ -37,7 +37,7 @@ class AppModule {
 
     @Provides
     fun provideCandidatDao(appDatabase: AppDatabase): CandidatDtoDao {
-        return appDatabase.candidateDtoDao()
+        return appDatabase.candidatDtoDao()
     }
 
 

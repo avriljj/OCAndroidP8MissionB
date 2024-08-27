@@ -12,14 +12,17 @@ interface CandidatDtoDao {
     suspend fun insertCandidat(exercise: CandidatDto): Long
 
 
-    @Query("SELECT * FROM candidat")
+    @Query("SELECT * FROM CandidatDto")
     suspend fun getAllCandidats(): List<CandidatDto>
 
 
-    @Query("DELETE FROM candidat WHERE id = :id")
+    @Query("DELETE FROM CandidatDto WHERE id = :id")
     suspend fun deleteCandidatById(id: Long)
 
-    @Query("SELECT * FROM candidat WHERE isFav = 1")
+    @Query("DELETE FROM CandidatDto")
+    suspend fun deleteAllCandidats()
+
+    @Query("SELECT * FROM CandidatDto WHERE isFav = 1")
     suspend fun getFavoriteCandidats(): List<CandidatDto>
 
 

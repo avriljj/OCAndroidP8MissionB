@@ -1,6 +1,7 @@
 package com.example.vitesse.ui.candidat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,35 +29,57 @@ class AllCandidatesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycler_view_all)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Initialize the adapter
+        // Initialize the adapter with an empty list
         adapter = CandidateAdapter(emptyList())
         recyclerView.adapter = adapter
-
-        // Fetch data from database
-        fetchCandidates()
 
         return view
     }
 
-    private fun fetchCandidates() {
-        // Use lifecycleScope to launch a coroutine
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Populate and fetch data when the view is ready
+        populateAndFetchCandidates()
+    }
+
+    private fun populateAndFetchCandidates() {
         lifecycleScope.launch {
-            // Get the database instance
+            val db = AppDatabase.getDatabase(requireContext(), lifecycleScope)
+
+            // Populate the database if it's empty
+            withContext(Dispatchers.IO) {
+                val candidatesCount = db.candidatDtoDao().getAllCandidats().size
+                if (candidatesCount == 0) {
+                    Log.d("AllCandidatesFragment", "Populating the database with initial data")
+                    AppDatabase.populateDatabase(db.candidatDtoDao())
+                }
+            }
+
+            // Fetch candidates after population
+            fetchCandidates()
+        }
+    }
+
+    private fun fetchCandidates() {
+        lifecycleScope.launch {
             val db = AppDatabase.getDatabase(requireContext(), lifecycleScope)
 
             // Fetch the candidates from the database
             val candidateDtos = withContext(Dispatchers.IO) {
-                db.candidatDtoDao().getAllCandidats() // This should return a list of CandidatDto
+                db.candidatDtoDao().getAllCandidats()
             }
 
             // Convert the list of CandidatDto to a list of Candidat
             val candidates = candidateDtos.map { dto -> Candidat.fromDto(dto) }
 
-            // Update the adapter with the fetched data
-            adapter = CandidateAdapter(candidates)
-            recyclerView.adapter = adapter
+            // Log the size of the list to verify how many candidates were fetched
+            Log.d("AllCandidatesFragment", "Number of candidates fetched: ${candidates.size}")
+
+            // Ensure the adapter is updated on the main thread
+            withContext(Dispatchers.Main) {
+                adapter = CandidateAdapter(candidates)
+                recyclerView.adapter = adapter
+            }
         }
     }
-
 }
-

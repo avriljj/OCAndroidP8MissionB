@@ -1,43 +1,18 @@
 package com.example.vitesse.data.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = "candidat")
+@Entity(tableName = "CandidatDto")
 data class CandidatDto(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Long? = 0,
-
-
-    @ColumnInfo(name = "name")
-    var name: String,
-
-
-    @ColumnInfo(name = "surname")
-    var surname: String,
-
-
-    @ColumnInfo(name = "phone")
-    var phone: String,
-
-
-    @ColumnInfo(name = "email")
-    var email: String,
-
-    @ColumnInfo(name = "birthDate")
-    var birthDate: Date?,
-
-    @ColumnInfo(name = "salary")
-    var salary: Int,
-
-    @ColumnInfo(name = "note")
-    var note: String,
-
-    @ColumnInfo(name = "isFav")
-    var isFav: Boolean
-
-
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // Auto-generate the primary key
+    val name: String,
+    val surname: String,
+    val phone: String,
+    val email: String,
+    val birthDate: Date?,
+    val salary: Int,
+    val note: String,
+    val isFav: Boolean
 )

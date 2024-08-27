@@ -17,7 +17,7 @@ class Candidat(
 
     fun toDto(): CandidatDto {
         return CandidatDto(
-            id = this.id,
+
             name = this.name,
             surname = this.surname,
             phone = this.phone,
@@ -33,7 +33,7 @@ class Candidat(
     companion object {
         fun fromDto(dto: CandidatDto): Candidat {
             return Candidat(
-                id = dto.id,
+
                 name = dto.name,
                 surname = dto.surname,
                 phone = dto.phone,

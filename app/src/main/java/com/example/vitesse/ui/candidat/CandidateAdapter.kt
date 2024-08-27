@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vitesse.domain.model.Candidat
 import com.example.vitesse.databinding.ItemCandidateBinding
 
-
 class CandidateAdapter(private val candidates: List<Candidat>) : RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CandidateViewHolder {
@@ -29,5 +28,3 @@ class CandidateAdapter(private val candidates: List<Candidat>) : RecyclerView.Ad
         }
     }
 }
-
-

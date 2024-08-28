@@ -2,13 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_all"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="600dp"
         android:layout_marginTop="8dp" />
+
+    <!-- FrameLayout for positioning the FAB -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+
+            android:contentDescription="@string/fab_description"
+            android:src="@drawable/baseline_add_24"
+            app:tint="@color/white" />
+
+    </FrameLayout>
 
 </LinearLayout>

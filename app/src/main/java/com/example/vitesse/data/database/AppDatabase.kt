@@ -41,7 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        val dataPopulationComplete = MutableLiveData<Boolean>()
+        var dataPopulationComplete = MutableLiveData<Boolean>()
 
         fun getDatabase(context: Context, coroutineScope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {

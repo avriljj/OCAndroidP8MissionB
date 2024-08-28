@@ -1,12 +1,15 @@
 package com.example.vitesse
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.vitesse.databinding.ActivityMainBinding
+import com.example.vitesse.ui.add.AddCandidateActivity
 import com.example.vitesse.ui.candidat.AllCandidatesFragment
 import com.example.vitesse.ui.favorite.FavoriteCandidatesFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
                 else -> throw IllegalStateException("Unexpected position $position")
             }
         }.attach()
+
+
     }
 
     private inner class ViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
@@ -45,4 +50,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

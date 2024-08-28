@@ -65,7 +65,8 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0") // Version needs to be added to versions.toml if you want to use a reference
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation(libs.androidx.activity) // Version needs to be added to versions.toml if you want to use a reference
     kapt(libs.hilt.compiler)
 
     // Core and AppCompat

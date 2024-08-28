@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Vitesse</string>
+    <string name="fab_description">add new candidate</string>
 </resources>

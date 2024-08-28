@@ -1,7 +1,10 @@
 package com.example.vitesse.ui.candidat
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.vitesse.data.database.AppDatabase
 import com.example.vitesse.domain.model.Candidat
 import kotlinx.coroutines.launch

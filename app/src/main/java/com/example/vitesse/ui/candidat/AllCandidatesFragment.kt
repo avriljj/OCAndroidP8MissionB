@@ -1,10 +1,13 @@
 package com.example.vitesse.ui.candidat
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,15 +15,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vitesse.R
 import com.example.vitesse.data.database.AppDatabase
+import com.example.vitesse.ui.add.AddCandidateActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class AllCandidatesFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CandidateAdapter
 
-    // Instantiate the ViewModel directly without a factory
     private val viewModel: AllCandidatesViewModel by viewModels()
 
+    // Register the ActivityResultLauncher
+    private val addCandidateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val refreshNeeded = result.data?.getBooleanExtra("refreshNeeded", false) ?: false
+            if (refreshNeeded) {
+                viewModel.refreshCandidates()  // Refresh the list of candidates
+            }
+        }
+    }
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,29 +44,24 @@ class AllCandidatesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycler_view_all)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Initialize the adapter with an empty list
         adapter = CandidateAdapter(emptyList())
         recyclerView.adapter = adapter
 
-        // Observe the ViewModel
         observeViewModel()
-
-        // Observe the database population and refresh the UI when complete
-        AppDatabase.dataPopulationComplete.observe(viewLifecycleOwner, Observer { isComplete ->
-            if (isComplete) {
-                viewModel.refreshCandidates()
-            }
-        })
-
-        Log.e("frag","All candidates fragment reached")
+        // Set up the FAB to launch AddCandidateActivity
+        val fab: FloatingActionButton = view.findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(requireContext(), AddCandidateActivity::class.java)
+            addCandidateLauncher.launch(intent)
+        }
 
         return view
     }
 
     private fun observeViewModel() {
         viewModel.candidates.observe(viewLifecycleOwner) { candidates ->
-            adapter = CandidateAdapter(candidates)
-            recyclerView.adapter = adapter
+            adapter.updateData(candidates)
         }
     }
+
 }

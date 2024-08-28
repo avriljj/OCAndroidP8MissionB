@@ -3,10 +3,10 @@ package com.example.vitesse.ui.candidat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vitesse.domain.model.Candidat
 import com.example.vitesse.databinding.ItemCandidateBinding
+import com.example.vitesse.domain.model.Candidat
 
-class CandidateAdapter(private val candidates: List<Candidat>) : RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>() {
+class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CandidateViewHolder {
         val binding = ItemCandidateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -14,11 +14,15 @@ class CandidateAdapter(private val candidates: List<Candidat>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: CandidateViewHolder, position: Int) {
-        val candidate = candidates[position]
-        holder.bind(candidate)
+        holder.bind(candidates[position])
     }
 
     override fun getItemCount(): Int = candidates.size
+
+    fun updateData(newCandidates: List<Candidat>) {
+        candidates = newCandidates
+        notifyDataSetChanged()  // Notify adapter of data change
+    }
 
     class CandidateViewHolder(private val binding: ItemCandidateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(candidate: Candidat) {

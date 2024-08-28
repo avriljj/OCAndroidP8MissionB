@@ -77,9 +77,26 @@ class CandidateDetailActivity : AppCompatActivity() {
     private fun toggleFavorite(item: MenuItem?) {
         isFavorite = !isFavorite
         updateFavoriteIcon(item)
-        // Here, you would update the favorite status in your database or model
-        Toast.makeText(this, if (isFavorite) "Marked as favorite" else "Unmarked as favorite", Toast.LENGTH_SHORT).show()
+
+        // Update the favorite status in the database
+        lifecycleScope.launch(Dispatchers.IO) {
+            val database = AppDatabase.getDatabase(applicationContext, lifecycleScope)
+            val candidateDao = database.candidatDtoDao()
+
+            // Update the candidate's favorite status in the database
+            candidateDao.updateFavoriteStatus(candidateId, isFavorite)
+
+            withContext(Dispatchers.Main) {
+                // Notify the user with a Toast
+                Toast.makeText(
+                    this@CandidateDetailActivity,
+                    if (isFavorite) "Marked as favorite" else "Unmarked as favorite",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
+
 
     private fun updateFavoriteIcon(item: MenuItem?) {
         item?.setIcon(if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border)

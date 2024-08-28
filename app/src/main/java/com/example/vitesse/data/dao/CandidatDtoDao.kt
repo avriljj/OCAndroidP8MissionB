@@ -31,5 +31,8 @@ interface CandidatDtoDao {
     @Query("SELECT * FROM CandidatDto WHERE isFav = 1")
     fun getFavoriteCandidatesLive(): LiveData<List<CandidatDto>>
 
+    @Query("UPDATE CandidatDto SET isFav = :isFav WHERE id = :id")
+    suspend fun updateFavoriteStatus(id: Long, isFav: Boolean)
+
 
 }

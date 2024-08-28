@@ -8,19 +8,11 @@ import kotlinx.coroutines.launch
 
 class FavoriteCandidatesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _favorites = MutableLiveData<List<Candidat>>()
-    val favorites: LiveData<List<Candidat>> get() = _favorites
 
     private val database = AppDatabase.getDatabase(application, viewModelScope)
 
-    init {
-        refreshCandidates()
-    }
-
-    fun refreshCandidates() {
-        viewModelScope.launch {
-            val favoriteDtos = database.candidatDtoDao().getFavoriteCandidates()
-            _favorites.postValue(favoriteDtos.map { Candidat.fromDto(it) })
-        }
+    // LiveData directly tied to the database query
+    val favorties: LiveData<List<Candidat>> = database.candidatDtoDao().getFavoriteCandidatesLive().map { candidateDtos ->
+        candidateDtos.map { Candidat.fromDto(it) }
     }
 }

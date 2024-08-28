@@ -9,6 +9,9 @@ import com.example.vitesse.databinding.ItemCandidateBinding
 import com.example.vitesse.domain.model.Candidat
 import com.example.vitesse.ui.detail.CandidateDetailActivity
 
+import androidx.recyclerview.widget.DiffUtil
+
+
 class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CandidateViewHolder {
@@ -23,8 +26,11 @@ class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Ad
     override fun getItemCount(): Int = candidates.size
 
     fun updateData(newCandidates: List<Candidat>) {
+        val diffCallback = CandidatesDiffCallback(candidates, newCandidates)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         candidates = newCandidates
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class CandidateViewHolder(private val binding: ItemCandidateBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -43,8 +49,26 @@ class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Ad
                     putExtra("candidateNote", candidate.note)
                 }
                 context.startActivity(intent)
-
             }
         }
     }
+
+    class CandidatesDiffCallback(
+        private val oldList: List<Candidat>,
+        private val newList: List<Candidat>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
 }
+

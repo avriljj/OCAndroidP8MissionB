@@ -25,15 +25,6 @@ class AllCandidatesFragment : Fragment() {
 
     private val viewModel: AllCandidatesViewModel by viewModels()
 
-    // Register the ActivityResultLauncher
-    private val addCandidateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val refreshNeeded = result.data?.getBooleanExtra("refreshNeeded", false) ?: false
-            if (refreshNeeded) {
-                viewModel.refreshCandidates()  // Refresh the list of candidates
-            }
-        }
-    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -52,7 +43,7 @@ class AllCandidatesFragment : Fragment() {
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         fab.setOnClickListener {
             val intent = Intent(requireContext(), AddCandidateActivity::class.java)
-            addCandidateLauncher.launch(intent)
+            startActivity(intent)
         }
 
         return view
@@ -60,8 +51,11 @@ class AllCandidatesFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.candidates.observe(viewLifecycleOwner) { candidates ->
-            adapter.updateData(candidates)
+            if (candidates != null) {
+                adapter.updateData(candidates)
+            }
         }
     }
+
 
 }

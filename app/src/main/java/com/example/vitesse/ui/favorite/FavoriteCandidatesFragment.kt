@@ -37,20 +37,16 @@ class FavoriteCandidatesFragment : Fragment() {
         // Observe the ViewModel
         observeViewModel()
 
-        // Observe the database population and refresh the UI when complete
-        AppDatabase.dataPopulationComplete.observe(viewLifecycleOwner, Observer { isComplete ->
-            if (isComplete) {
-                viewModel.refreshCandidates()
-            }
-        })
+
 
         return view
     }
 
     private fun observeViewModel() {
-        viewModel.favorites.observe(viewLifecycleOwner) { favorites ->
-            adapter = CandidateAdapter(favorites)
-            recyclerView.adapter = adapter
+        viewModel.favorties.observe(viewLifecycleOwner) { candidates ->
+            if (candidates != null) {
+                adapter.updateData(candidates)
+            }
         }
     }
 }

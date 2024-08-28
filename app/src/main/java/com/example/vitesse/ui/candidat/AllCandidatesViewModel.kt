@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.vitesse.data.database.AppDatabase
 import com.example.vitesse.domain.model.Candidat
@@ -11,19 +12,12 @@ import kotlinx.coroutines.launch
 
 class AllCandidatesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _candidates = MutableLiveData<List<Candidat>>()
-    val candidates: LiveData<List<Candidat>> get() = _candidates
-
     private val database = AppDatabase.getDatabase(application, viewModelScope)
 
-    init {
-        refreshCandidates()
+    // LiveData directly tied to the database query
+    val candidates: LiveData<List<Candidat>> = database.candidatDtoDao().getAllCandidatesLive().map { candidateDtos ->
+        candidateDtos.map { Candidat.fromDto(it) }
     }
 
-    fun refreshCandidates() {
-        viewModelScope.launch {
-            val candidateDtos = database.candidatDtoDao().getAllCandidates()
-            _candidates.postValue(candidateDtos.map { Candidat.fromDto(it) })
-        }
-    }
+
 }

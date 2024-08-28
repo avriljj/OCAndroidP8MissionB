@@ -94,16 +94,18 @@ class CandidateDetailActivity : AppCompatActivity() {
         if (candidateId != (-1).toLong()) {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
-                    val database = AppDatabase.getDatabase(applicationContext, lifecycleScope)  // Pass the CoroutineScope here
+                    val database = AppDatabase.getDatabase(applicationContext, lifecycleScope)
                     val candidateDao = database.candidatDtoDao()
                     candidateDao.deleteCandidateById(candidateId)
                 }
-                Toast.makeText(this@CandidateDetailActivity, "Candidate deleted", Toast.LENGTH_SHORT).show()
-                finish()  // Close the activity and go back
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@CandidateDetailActivity, "Candidate deleted", Toast.LENGTH_SHORT).show()
+                    finish()  // Close the activity and go back
+                }
             }
         } else {
             Toast.makeText(this, "Candidate not found $candidateId", Toast.LENGTH_SHORT).show()
-
         }
     }
+
 }

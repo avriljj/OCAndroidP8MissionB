@@ -47,6 +47,7 @@ class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Ad
                     putExtra("candidateEmail", candidate.email)
                     putExtra("candidatePhone", candidate.phone)
                     putExtra("candidateNote", candidate.note)
+                    putExtra("isFav", candidate.isFav)
                 }
                 context.startActivity(intent)
             }

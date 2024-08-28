@@ -13,6 +13,10 @@
         android:theme="@style/Theme.MaterialComponents.Light"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detail.CandidateDetailActivity"
+            android:theme="@style/Theme.Vitesse.CandidateDetail" />
+
+        <activity
             android:name=".ui.add.AddCandidateActivity"
             android:exported="false" />
         <activity

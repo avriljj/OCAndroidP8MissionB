@@ -1,10 +1,13 @@
 package com.example.vitesse.ui.candidat
 
+
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vitesse.databinding.ItemCandidateBinding
 import com.example.vitesse.domain.model.Candidat
+import com.example.vitesse.ui.detail.CandidateDetailActivity
 
 class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>() {
 
@@ -21,14 +24,25 @@ class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Ad
 
     fun updateData(newCandidates: List<Candidat>) {
         candidates = newCandidates
-        notifyDataSetChanged()  // Notify adapter of data change
+        notifyDataSetChanged()
     }
 
-    class CandidateViewHolder(private val binding: ItemCandidateBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CandidateViewHolder(private val binding: ItemCandidateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(candidate: Candidat) {
             binding.textName.text = candidate.name
             binding.textEmail.text = candidate.email
-            // Bind other fields as necessary
+
+            // Set an onClickListener to open CandidateDetailActivity
+            binding.root.setOnClickListener {
+                val context = binding.root.context
+                val intent = Intent(context, CandidateDetailActivity::class.java).apply {
+                    putExtra("candidateName", candidate.name)
+                    putExtra("candidateEmail", candidate.email)
+                    putExtra("candidatePhone", candidate.phone)
+                    putExtra("candidateNote", candidate.note)
+                }
+                context.startActivity(intent)
+            }
         }
     }
 }

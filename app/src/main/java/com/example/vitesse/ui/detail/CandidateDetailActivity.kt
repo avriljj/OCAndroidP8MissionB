@@ -5,12 +5,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.vitesse.R
+import com.example.vitesse.data.database.AppDatabase
 import com.example.vitesse.databinding.ActivityCandidateDetailBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CandidateDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCandidateDetailBinding
+    private var candidateId: Long =  (-1).toLong()  // Replace with your candidate's ID type if it's different
     private var isFavorite: Boolean = false  // Assuming you have a way to determine if it's a favorite
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +30,8 @@ class CandidateDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Retrieve the candidate data passed from the previous activity
+        candidateId =
+            intent.getLongExtra("candidateId", -1) // Ensure the candidate ID is passed
         val candidateName = intent.getStringExtra("candidateName")
         val candidateEmail = intent.getStringExtra("candidateEmail")
         val candidatePhone = intent.getStringExtra("candidatePhone")
@@ -83,7 +91,19 @@ class CandidateDetailActivity : AppCompatActivity() {
     }
 
     private fun deleteCandidate() {
-        // Perform delete action (e.g., remove candidate from database)
-        Toast.makeText(this, "Delete candidate", Toast.LENGTH_SHORT).show()
+        if (candidateId != (-1).toLong()) {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val database = AppDatabase.getDatabase(applicationContext, lifecycleScope)  // Pass the CoroutineScope here
+                    val candidateDao = database.candidatDtoDao()
+                    candidateDao.deleteCandidateById(candidateId)
+                }
+                Toast.makeText(this@CandidateDetailActivity, "Candidate deleted", Toast.LENGTH_SHORT).show()
+                finish()  // Close the activity and go back
+            }
+        } else {
+            Toast.makeText(this, "Candidate not found $candidateId", Toast.LENGTH_SHORT).show()
+
+        }
     }
 }

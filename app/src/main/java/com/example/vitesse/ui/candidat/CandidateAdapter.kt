@@ -36,12 +36,14 @@ class CandidateAdapter(private var candidates: List<Candidat>) : RecyclerView.Ad
             binding.root.setOnClickListener {
                 val context = binding.root.context
                 val intent = Intent(context, CandidateDetailActivity::class.java).apply {
+                    putExtra("candidateId", candidate.id)
                     putExtra("candidateName", candidate.name)
                     putExtra("candidateEmail", candidate.email)
                     putExtra("candidatePhone", candidate.phone)
                     putExtra("candidateNote", candidate.note)
                 }
                 context.startActivity(intent)
+
             }
         }
     }

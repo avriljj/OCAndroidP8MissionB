@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vitesse.data.database.AppDatabase
 import com.example.vitesse.data.entity.CandidatDto
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 class AddCandidateViewModel(application: Application) : AndroidViewModel(application) {
 

@@ -6,7 +6,7 @@ import java.util.Date
 
 @Entity(tableName = "CandidatDto")
 data class CandidatDto(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // Auto-generate the primary key
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,  // Auto-generate the primary key
     val name: String,
     val surname: String,
     val phone: String,

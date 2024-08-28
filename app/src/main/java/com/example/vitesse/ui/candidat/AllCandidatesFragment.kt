@@ -6,20 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.lifecycle.lifecycleScope
 import com.example.vitesse.R
 import com.example.vitesse.data.database.AppDatabase
-import com.example.vitesse.domain.model.Candidat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AllCandidatesFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CandidateAdapter
+
+    // Instantiate the ViewModel directly without a factory
+    private val viewModel: AllCandidatesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,53 +33,25 @@ class AllCandidatesFragment : Fragment() {
         adapter = CandidateAdapter(emptyList())
         recyclerView.adapter = adapter
 
+        // Observe the ViewModel
+        observeViewModel()
+
+        // Observe the database population and refresh the UI when complete
+        AppDatabase.dataPopulationComplete.observe(viewLifecycleOwner, Observer { isComplete ->
+            if (isComplete) {
+                viewModel.refreshCandidates()
+            }
+        })
+
+        Log.e("frag","All candidates fragment reached")
+
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Populate and fetch data when the view is ready
-        populateAndFetchCandidates()
-    }
-
-    private fun populateAndFetchCandidates() {
-        lifecycleScope.launch {
-            val db = AppDatabase.getDatabase(requireContext(), lifecycleScope)
-
-            // Populate the database if it's empty
-            withContext(Dispatchers.IO) {
-                val candidatesCount = db.candidatDtoDao().getAllCandidats().size
-                if (candidatesCount == 0) {
-                    Log.d("AllCandidatesFragment", "Populating the database with initial data")
-                    AppDatabase.populateDatabase(db.candidatDtoDao())
-                }
-            }
-
-            // Fetch candidates after population
-            fetchCandidates()
-        }
-    }
-
-    private fun fetchCandidates() {
-        lifecycleScope.launch {
-            val db = AppDatabase.getDatabase(requireContext(), lifecycleScope)
-
-            // Fetch the candidates from the database
-            val candidateDtos = withContext(Dispatchers.IO) {
-                db.candidatDtoDao().getAllCandidats()
-            }
-
-            // Convert the list of CandidatDto to a list of Candidat
-            val candidates = candidateDtos.map { dto -> Candidat.fromDto(dto) }
-
-            // Log the size of the list to verify how many candidates were fetched
-            Log.d("AllCandidatesFragment", "Number of candidates fetched: ${candidates.size}")
-
-            // Ensure the adapter is updated on the main thread
-            withContext(Dispatchers.Main) {
-                adapter = CandidateAdapter(candidates)
-                recyclerView.adapter = adapter
-            }
+    private fun observeViewModel() {
+        viewModel.candidates.observe(viewLifecycleOwner) { candidates ->
+            adapter = CandidateAdapter(candidates)
+            recyclerView.adapter = adapter
         }
     }
 }

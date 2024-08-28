@@ -11,7 +11,7 @@ data class CandidatDto(
     val surname: String,
     val phone: String,
     val email: String,
-    val birthDate: Date?,
+    val birthDate: Date,
     val salary: Int,
     val note: String,
     val isFav: Boolean

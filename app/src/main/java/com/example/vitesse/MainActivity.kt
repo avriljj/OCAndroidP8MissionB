@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.vitesse.databinding.ActivityMainBinding
 import com.example.vitesse.ui.candidat.AllCandidatesFragment
-import com.example.vitesse.ui.candidat.FavoriteCandidatesFragment
+import com.example.vitesse.ui.favorite.FavoriteCandidatesFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Set up the ViewPager with the fragments
-        binding.viewPager.adapter = ViewPagerAdapter(this)
+        val adapter = ViewPagerAdapter(this)
+        binding.viewPager.adapter = adapter
 
         // Link the TabLayout with the ViewPager
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

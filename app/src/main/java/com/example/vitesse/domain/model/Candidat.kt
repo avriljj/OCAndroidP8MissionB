@@ -9,7 +9,7 @@ class Candidat(
     var surname: String,
     var phone: String,
     var email: String,
-    var birthDate: Date?,
+    var birthDate: Date,
     var salary: Int,
     var note: String,
     var isFav: Boolean

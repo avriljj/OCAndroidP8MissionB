@@ -4,26 +4,25 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.vitesse.data.entity.CandidatDto
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CandidatDtoDao {
     @Insert
-    suspend fun insertCandidat(exercise: CandidatDto): Long
+    suspend fun insertCandidate(exercise: CandidatDto): Long
 
 
     @Query("SELECT * FROM CandidatDto")
-    suspend fun getAllCandidats(): List<CandidatDto>
+    suspend fun getAllCandidates(): List<CandidatDto>
 
 
     @Query("DELETE FROM CandidatDto WHERE id = :id")
-    suspend fun deleteCandidatById(id: Long)
+    suspend fun deleteCandidateById(id: Long)
 
     @Query("DELETE FROM CandidatDto")
-    suspend fun deleteAllCandidats()
+    suspend fun deleteAllCandidates()
 
     @Query("SELECT * FROM CandidatDto WHERE isFav = 1")
-    suspend fun getFavoriteCandidats(): List<CandidatDto>
+    suspend fun getFavoriteCandidates(): List<CandidatDto>
 
 
 }

@@ -2,6 +2,7 @@ package com.example.vitesse.data.database
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -23,11 +24,14 @@ abstract class AppDatabase : RoomDatabase() {
     private class AppDatabaseCallback(
         private val scope: CoroutineScope
     ) : Callback() {
+
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
                     populateDatabase(database.candidatDtoDao())
+                    // Notify that data population is complete
+                    dataPopulationComplete.postValue(true)
                 }
             }
         }
@@ -36,6 +40,8 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
+
+        val dataPopulationComplete = MutableLiveData<Boolean>()
 
         fun getDatabase(context: Context, coroutineScope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -53,35 +59,35 @@ abstract class AppDatabase : RoomDatabase() {
 
         suspend fun populateDatabase(candidatDtoDao: CandidatDtoDao) {
             // Clear existing data to ensure a fresh start
-            candidatDtoDao.deleteAllCandidats()
+            candidatDtoDao.deleteAllCandidates()
 
             // Log before inserting
             Log.d("AppDatabase", "Starting database population")
 
             // Insert candidates
             try {
-                candidatDtoDao.insertCandidat(
+                candidatDtoDao.insertCandidate(
                     CandidatDto(
                         name = "Jin", surname = "Zhao", phone = "", email = "jin@icloud.com",
                         birthDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1990-01-01"),
                         salary = 12, note = "Learning programming", isFav = false
                     )
                 )
-                candidatDtoDao.insertCandidat(
+                candidatDtoDao.insertCandidate(
                     CandidatDto(
                         name = "Alice", surname = "Pio", phone = "", email = "alice@icloud.com",
                         birthDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1990-01-01"),
                         salary = 12, note = "Learning programming", isFav = false
                     )
                 )
-                candidatDtoDao.insertCandidat(
+                candidatDtoDao.insertCandidate(
                     CandidatDto(
                         name = "Lane", surname = "Yu", phone = "", email = "lane@icloud.com",
                         birthDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1990-01-01"),
                         salary = 12, note = "Learning programming", isFav = true
                     )
                 )
-                candidatDtoDao.insertCandidat(
+                candidatDtoDao.insertCandidate(
                     CandidatDto(
                         name = "Lolo", surname = "Li", phone = "", email = "lolo@icloud.com",
                         birthDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1990-01-01"),
@@ -90,7 +96,7 @@ abstract class AppDatabase : RoomDatabase() {
                 )
 
                 // Log after inserting
-                val allCandidates = candidatDtoDao.getAllCandidats()
+                val allCandidates = candidatDtoDao.getAllCandidates()
                 Log.d("AppDatabase", "Number of candidates inserted: ${allCandidates.size}")
 
             } catch (e: Exception) {
